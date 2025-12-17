@@ -1,0 +1,144 @@
+// ImotiBG+ Database Schema
+// Bulgarian Real Estate Portal with POI Proximity Data
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Property {
+  id          String   @id @default(cuid())
+
+  // Basic info
+  title       String
+  description String?
+  price       Decimal
+  currency    String   @default("BGN")
+  pricePerSqm Decimal?
+
+  // Property details
+  propertyType PropertyType
+  area         Decimal  // in square meters
+  rooms        Int?
+  floor        Int?
+  totalFloors  Int?
+  yearBuilt    Int?
+
+  // Location
+  address     String
+  city        String
+  neighborhood String?
+  latitude    Decimal
+  longitude   Decimal
+
+  // Source tracking
+  sourceUrl   String?  @unique
+  sourceSite  String?
+
+  // Metadata
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  images      PropertyImage[]
+  pois        PropertyPOI[]
+
+  @@index([city, propertyType])
+  @@index([latitude, longitude])
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  STUDIO
+  MAISONETTE
+  PENTHOUSE
+  COMMERCIAL
+  LAND
+  GARAGE
+}
+
+model PropertyImage {
+  id         String   @id @default(cuid())
+  url        String
+  isPrimary  Boolean  @default(false)
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+}
+
+model POICategory {
+  id           String   @id @default(cuid())
+  name         String   @unique  // e.g., "grocery", "kindergarten", "hospital"
+  nameBg       String            // Bulgarian name
+  icon         String?           // Icon identifier
+  googleTypes  String[]          // Google Places API types (array for multiple types)
+  searchRadius Int      @default(1000)  // Search radius in meters
+  importance   Int      @default(5)     // 1-10 default importance
+
+  pois         PropertyPOI[]
+}
+
+model PropertyPOI {
+  id           String   @id @default(cuid())
+
+  // The property this POI is associated with
+  propertyId   String
+  property     Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  // POI category
+  categoryId   String
+  category     POICategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  // POI details
+  name         String
+  address      String?
+  latitude     Decimal
+  longitude    Decimal
+
+  // Distances (cached)
+  distanceMeters    Int
+  walkingMinutes    Int?
+  drivingMinutes    Int?
+  transitMinutes    Int?
+
+  // Google Places data
+  googlePlaceId String?
+  rating        Decimal?
+
+  // Cache metadata
+  fetchedAt    DateTime @default(now())
+
+  // Unique constraint: one POI per property+place, with separate index for lookups
+  // Note: If googlePlaceId is null, we rely on propertyId+categoryId+name for uniqueness at app level
+  @@unique([propertyId, googlePlaceId])
+  @@index([propertyId, categoryId])
+  @@index([googlePlaceId])
+}
+
+model UserPreference {
+  id        String   @id @default(cuid())
+  userId    String?  // Anonymous users get session-based ID
+  sessionId String?
+
+  // Priority weights as JSON: { "grocery": 8, "kindergarten": 5, ... }
+  // This is more flexible than hardcoded columns - adding new POI types doesn't require schema changes
+  categoryWeights Json @default("{}")
+
+  // Location preferences
+  maxCommuteMinutes Int?
+  commuteToAddress  String?
+  commuteToLat      Decimal?
+  commuteToLng      Decimal?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([sessionId])
+}
