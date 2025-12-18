@@ -4,8 +4,8 @@ Bulgarian Real Estate Portal with POI Proximity Data
 
 ## Project Status
 
-**Current Phase**: Phase 2 - POI Integration ✅
-**Last Updated**: December 17, 2024
+**Current Phase**: Phase 3 - User Preferences ✅
+**Last Updated**: December 18, 2024
 
 ## What's Completed
 
@@ -24,6 +24,15 @@ Bulgarian Real Estate Portal with POI Proximity Data
 - Interactive Leaflet maps
 - Batch POI fetching CLI
 - API endpoints for POI management
+
+### Phase 3: User Preferences ✅
+- Multi-step preference questionnaire
+- Dynamic weight calculation from answers
+- Property scoring algorithm (0-100)
+- Personalized property ranking
+- Score badges on property cards
+- POI category filters
+- Preference API endpoints
 
 ## Quick Start
 
@@ -127,15 +136,18 @@ DATABASE_URL="postgresql://ddachkinov@localhost:5432/imoti_bg_plus"
 
 - `CLAUDE_CODE_PROMPT.md` - Complete project documentation and architecture
 - `docs/PHASE_2_POI_INTEGRATION.md` - Phase 2 POI integration guide
+- `docs/PHASE_3_USER_PREFERENCES.md` - Phase 3 personalization guide
 - `CLAUDE.md` - Project context and progress tracking
 
-## Next Steps (Phase 3)
+## Next Steps (Phase 4+)
 
-- [ ] User preference questionnaire
-- [ ] Personalized property scoring
-- [ ] Property ranking by user priorities
-- [ ] Commute time calculator
-- [ ] POI filters on listing page
+- [ ] Commute time calculator with workplace location
+- [ ] User authentication and saved preferences
+- [ ] Advanced filters (price range, rooms, property type)
+- [ ] Map view with score-based markers
+- [ ] Email alerts for high-scoring properties
+- [ ] Property comparison tool
+- [ ] Preference profile editing
 
 ## License
 
