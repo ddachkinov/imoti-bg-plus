@@ -4,16 +4,26 @@ Bulgarian Real Estate Portal with POI Proximity Data
 
 ## Project Status
 
-**Current Phase**: Phase 1 - Foundation ✅
+**Current Phase**: Phase 2 - POI Integration ✅
 **Last Updated**: December 17, 2024
 
 ## What's Completed
 
-- ✅ Next.js 15 with TypeScript and Tailwind CSS
-- ✅ PostgreSQL database (`imoti_bg_plus`)
-- ✅ Prisma ORM with complete schema
-- ✅ Project structure (components, services, lib, types)
-- ✅ Core files: Prisma client, POI categories, scoring algorithm
+### Phase 1: Foundation ✅
+- Next.js 15 with TypeScript and Tailwind CSS
+- PostgreSQL database (`imoti_bg_plus`)
+- Prisma ORM with complete schema
+- RESTful API (CRUD for properties)
+- Property listing and detail pages
+- Manual property entry form
+
+### Phase 2: POI Integration ✅
+- Google Places API integration
+- Automatic POI fetching with caching
+- Distance Matrix API (walking/driving times)
+- Interactive Leaflet maps
+- Batch POI fetching CLI
+- API endpoints for POI management
 
 ## Quick Start
 
@@ -37,11 +47,38 @@ npx prisma migrate dev
 # Generate Prisma Client
 npx prisma generate
 
+# Seed database
+npx prisma db seed
+
 # Open Prisma Studio (database GUI)
 npx prisma studio
 
 # Reset database (careful!)
 npx prisma migrate reset
+```
+
+## POI Commands (Phase 2)
+
+```bash
+# Fetch POIs for specific property
+npm run fetch-pois [property-id]
+
+# Fetch POIs for all properties
+npm run fetch-pois -- --all
+
+# Refresh stale POI data (>30 days)
+curl -X POST http://localhost:3000/api/pois/refresh
+```
+
+### Configure Google API Keys
+
+1. Get API keys from [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+2. Enable "Places API" and "Distance Matrix API"
+3. Add keys to `.env`:
+
+```env
+GOOGLE_PLACES_API_KEY="your-key-here"
+GOOGLE_DISTANCE_MATRIX_API_KEY="your-key-here"
 ```
 
 ## MCP PostgreSQL Server
@@ -86,16 +123,19 @@ DATABASE_URL="postgresql://ddachkinov@localhost:5432/imoti_bg_plus"
 # GOOGLE_PLACES_API_KEY="your-key-here"  # Phase 2
 ```
 
-## Next Steps (Phase 1)
-
-- [ ] Basic property CRUD API routes
-- [ ] Simple property listing UI
-- [ ] Manual property entry form
-- [ ] Seed database with test data
-
 ## Documentation
 
-See `CLAUDE_CODE_PROMPT.md` for complete project documentation.
+- `CLAUDE_CODE_PROMPT.md` - Complete project documentation and architecture
+- `docs/PHASE_2_POI_INTEGRATION.md` - Phase 2 POI integration guide
+- `CLAUDE.md` - Project context and progress tracking
+
+## Next Steps (Phase 3)
+
+- [ ] User preference questionnaire
+- [ ] Personalized property scoring
+- [ ] Property ranking by user priorities
+- [ ] Commute time calculator
+- [ ] POI filters on listing page
 
 ## License
 

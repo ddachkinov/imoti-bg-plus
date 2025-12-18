@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { PropertyWithRelations } from '@/types';
+import FetchPOIsButton from '@/components/FetchPOIsButton';
+import PropertyMapClient from '@/components/PropertyMapClient';
 
 type Params = {
   params: Promise<{
@@ -118,6 +120,34 @@ export default async function PropertyDetailPage(props: Params) {
               </div>
             )}
 
+            {/* Map */}
+            <div className="mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold text-gray-900">Локация и POI</h2>
+                <FetchPOIsButton
+                  propertyId={property.id}
+                  hasExistingPOIs={property.pois.length > 0}
+                />
+              </div>
+              <PropertyMapClient
+                latitude={Number(property.latitude)}
+                longitude={Number(property.longitude)}
+                pois={property.pois.map((poi) => ({
+                  id: poi.id,
+                  name: poi.name,
+                  latitude: Number(poi.latitude),
+                  longitude: Number(poi.longitude),
+                  distanceMeters: poi.distanceMeters,
+                  category: {
+                    name: poi.category.name,
+                    nameBg: poi.category.nameBg,
+                    icon: poi.category.icon || undefined,
+                  },
+                }))}
+                height="500px"
+              />
+            </div>
+
             {/* POIs */}
             {property.pois.length > 0 && (
               <div>
@@ -149,6 +179,14 @@ export default async function PropertyDetailPage(props: Params) {
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {property.pois.length === 0 && (
+              <div className="text-center py-8 bg-gray-50 rounded-lg">
+                <p className="text-gray-600 mb-4">
+                  Няма данни за близки POI. Натиснете бутона горе за да ги намерите.
+                </p>
               </div>
             )}
           </div>

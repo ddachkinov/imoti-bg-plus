@@ -11,24 +11,52 @@ Bulgarian real estate portal with POI proximity features
 - Google Places/Distance Matrix APIs
 
 ## Current Phase
-Phase 1: Foundation
+Phase 2: POI Integration (Complete ✅)
 
-## Last Completed (Dec 17, 2024)
+## Last Completed (Dec 17, 2024 - Phase 1 Complete ✅)
+### Infrastructure
 - Project bootstrap: Next.js 15, TypeScript, Tailwind CSS
 - PostgreSQL 16 installed and configured locally
-- Prisma schema with 5 models (Property, PropertyImage, POICategory, PropertyPOI, UserPreference)
-- Architectural review and fixes:
-  - Fixed .gitignore to version control migrations
-  - Changed POICategory.googleType from String to String[] array
-  - Added missing indexes (PropertyImage.propertyId, PropertyPOI.googlePlaceId)
-  - Added cascade delete on POICategory -> PropertyPOI
-  - Refactored UserPreference to use flexible JSON categoryWeights instead of hardcoded columns
+- Prisma 7 with pg adapter
+- Database schema with 5 models (Property, PropertyImage, POICategory, PropertyPOI, UserPreference)
 
-## Next Up
-- Basic property CRUD API routes (app/api/properties/)
-- Simple property listing UI
-- Manual property entry form for testing
-- Seed database with test properties
+### Architectural Improvements
+- Fixed .gitignore to version control migrations
+- Changed POICategory.googleType from String to String[] array
+- Added missing indexes (PropertyImage.propertyId, PropertyPOI.googlePlaceId)
+- Added cascade delete on POICategory -> PropertyPOI
+- Refactored UserPreference to use flexible JSON categoryWeights instead of hardcoded columns
+
+### Features Implemented
+- ✅ RESTful API (GET, POST, PUT, DELETE for properties)
+- ✅ Property listing page with Bulgarian UI
+- ✅ Property detail page with POI display
+- ✅ Manual property entry form
+- ✅ Database seed with 10 POI categories and 5 test properties
+- ✅ Property scoring algorithm
+- ✅ Type-safe API with proper error handling
+
+### Git Repository
+- Pushed to GitHub: https://github.com/ddachkinov/imoti-bg-plus
+
+## Last Completed (Dec 17, 2024 - Phase 2 Complete ✅)
+### POI Integration
+- ✅ Google Places API integration (searchNearbyPlaces, getDistanceMatrix)
+- ✅ POI fetching service with caching (30-day cache)
+- ✅ Distance calculations (straight-line + walking/driving times)
+- ✅ Interactive Leaflet map visualization
+- ✅ Batch POI fetching CLI script
+- ✅ API endpoints (fetch-pois, batch-fetch, refresh)
+- ✅ Client components (FetchPOIsButton, PropertyMap)
+- ✅ Cost management (top 3 per category, rate limiting)
+
+## Next Up (Phase 3: User Preferences)
+- User preference questionnaire UI
+- Store user priorities (categoryWeights)
+- Property scoring based on user preferences
+- Personalized property ranking
+- Preference adjustment UI
+- Commute time calculator
 
 ## Key Files
 - prisma/schema.prisma - Database schema
